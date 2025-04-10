@@ -11,22 +11,24 @@ function getPastEvent(){
             const randomIndex = Math.floor(Math.random() * events.length);
             resolve(events[randomIndex]);
         }, Math.random() * 1000);
-    })
+    });
 }
 
-async function travelThrougtHistory(n = 50){
+let arr = [];
+async function travelThrougtHistory(n = 20){
     try {
-        const newlistevents = Array.from({length:n},()=> getPastEvent());  // nuova variabile con all'interno array con tutte le n volte e inserimento nella f.ne getpastEvent
-      /*  for(let i=0; i<n; i++) {  // ciclo n volte
+        const newListEvents = Array.from({length:n},()=> getPastEvent());  // nuova variabile con all'interno array con tutte le n volte e inserimento nella f.ne getpastEvent 
+      // In collaborazione con raffaele la parte di newListEvents
+        /*  for(let i=0; i<n; i++) {  // ciclo n volte
             newlistevents.push(getPastEvent())  // inserimento all'interno della f.ne getPastEvent
         }*/
-        const risultato = await Promise.all(newlistevents);  // await=parola chiave usata quando stiamo aspettando il risultato di una promise
+        const risultato = await Promise.all(newListEvents);  // await=parola chiave usata quando stiamo aspettando il risultato di una promise
                                              // promise.all (collegata alla stringa precedente RACCOGLIE TUTTI I DATI) ti lancia l'esecuzione in parallelo
             console.log(risultato);
-        const FinalList = risultato.sort((a,b) => a.year - b.year)
-        Array.filter((events,n) => Array.findIndex(event => event.year, event.name)) // rimuovere duplicati dall'array
-        events.filter(event => event.year < 2000)
-        console.log(FinalList);
+        arr = risultato.sort((a,b) => (a.year - b.year)) // ordine cronologico
+        .filter((events, n, arr) => n === arr.findIndex(event => event.year=== events.year&& event.name===events.name)) // rimuovere duplicati dall'array
+        .filter(event => event.year < 2000);
+        console.log(arr);
     } catch (error) {
         console.log(error.message);
     };
