@@ -104,9 +104,48 @@ resolve(events[randomIndex]);
 })
 }
 
+  
+  let arr = [];
 
+  async function travelThrougtHistory(n = 95) {
+    const nuoviEventi = new Set();
+    
+    try {
+      while (nuoviEventi.size < 95 ) {
+        const richiesta = Array.from({length:n},()=> getPastEvent());
+        const risultato = await Promise.all(richiesta);
+        risultato.forEach(event => {
+        if (!nuoviEventi.has((`${event.year}:${event.name}`))) {
+          nuoviEventi.add((`${event.year}:${event.name}`))
+        }
+      });
+    };
+    
+    console.log(nuoviEventi);
+    
+    
+    arr = Array.from(nuoviEventi.values()).sort((a,b) => (a.year - b.year))
+    .filter((events,n, arr) => n === arr.findIndex(event => event.year === events.year&& event.name===events.name))
+    .filter(event => event.year < 2000);
+    
+    console.log(arr);  // ordinato con filtri //
+    
+    return nuoviEventi;
+
+    
+  } catch (error) {
+        console.log(error.message);
+      };
+    }
+
+travelThrougtHistory();
+      
+      
+      
+      
+ /*  ESERCIZIO INVIATO
   let arr = []; 
-
+  
   async function travelThrougtHistory(n = 95) {
     const nuoviEventi = new Set();
     const finalList = [];
@@ -133,8 +172,11 @@ resolve(events[randomIndex]);
     return finalList;
   
     }
-travelThrougtHistory().then(finalList => {
-  console.log(finalList); 
-});
+
+    travelThrougtHistory().then(finalList => {
+    console.log(finalList); 
+    });
+    */     
+     
 
   
